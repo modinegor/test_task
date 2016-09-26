@@ -11,6 +11,8 @@ from os import path
 
 from config import NFS_SERVER, NFS_DIR
 
+# !!! Seems it doesn't work
+
 name = 'ACL'
 description = 'Check ACL'
 
@@ -28,7 +30,7 @@ def setup(context):
         fl.write(context.file_content)
 
     call(['mount', '-t', 'nfs4', NFS_SERVER + ':' + NFS_DIR, dirpath])
-    call(['nfs4_setfacl', '-s', 'A::EVERYONE@:r', test_file])
+    call(['nfs4_setfacl', '-s', 'A::EVERYONE@:r', test_file])  # Obvious it is not for any linux like system
 
 
 def teardown(context):

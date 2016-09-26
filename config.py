@@ -6,5 +6,5 @@ LOG_FILE = path.join(_WORK_DIR, '%Y-%m-%d-%H-%M-%S.log')
 LAST_LOG = path.join(_WORK_DIR, 'last-log')
 DOC_FILE = path.join(_WORK_DIR, 'tests_doc', 'doc.txt')
 
-NFS_SERVER = '192.168.58.109'
+NFS_SERVER = '192.168.100.13'
 NFS_DIR = '/data'

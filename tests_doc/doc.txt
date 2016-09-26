@@ -84,7 +84,40 @@ Expected results:
 2. Directory is deleted
 
 ----------------------------------------
-Test Suite : owner
+Test Suite : Owner
+Description: Verify operations on changing owners
+
+Test Case: change_owner_user[item=directory]
+Change user owner for a directory
+Steps:
+1. Change user owner for a directory
+2. Change it back
+Expected results:
+1. Owner was changed to another user and then back
+
+Test Case: change_owner_user[item=file]
+Change user owner for a file
+Steps:
+1. Change user owner for a file
+2. Change it back
+Expected results:
+1. Owner was changed to another user and then back
+
+Test Case: change_owner_group[item=directory]
+Change group owner for a directory
+Steps:
+1. Change group owner for a directory
+2. Change it back
+Expected results:
+1. Owner was changed to another user and then back
+
+Test Case: change_owner_group[item=file]
+Change group owner for a file
+Steps:
+1. Change group owner for a file
+2. Change it back
+Expected results:
+1. Owner was changed to another user and then back
 
 ----------------------------------------
 Test Suite : Permissions
