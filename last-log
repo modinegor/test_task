@@ -1,0 +1,17 @@
+Content::create_file_root_dir[file_name=simple]: Passed
+Content::create_file_root_dir[file_name=`a`*255]: Passed
+Content::create_file_root_dir[file_name=a]: Passed
+Content::create_file_root_dir[file_name=!@#$%^&*()_+]: Passed
+Content::create_dir_root_dir[dir_name=simple]: Passed
+Content::create_dir_root_dir[dir_name=`a`*255]: Passed
+Content::create_dir_root_dir[dir_name=a]: Passed
+Content::create_dir_root_dir[dir_name=!@#$%^&*()_+]: Passed
+Permissions::change_file_permissions[mask=777]: Passed
+Permissions::change_file_permissions[mask=666]: Passed
+Permissions::change_file_permissions[mask=444]: Passed
+Permissions::change_dir_permissions[mask=777]: Passed
+Permissions::change_dir_permissions[mask=666]: Passed
+Permissions::change_dir_permissions[mask=444]: Passed
+ACL::check_read: Passed
+ACL::check_write: Failed
+ACL::Error on teardown : [Errno 16] Device or resource busy: '/tmp/tmpP8e26b'

@@ -14,7 +14,7 @@ class Collector(object):
     def collect(self):
         test_dir = self.config.test_directory
         for fl in listdir(test_dir):
-            if re.match('test_suite_.*\.py', fl):
+            if re.match('test_suite_.*\.py$', fl):
                 self.items.append(Module(path.join(test_dir, fl), reporter=self.reporter))
 
     def run(self):
@@ -37,11 +37,27 @@ class Collector(object):
 
                 for case in module.items:
                     df.write('Test Case: {0}\n'.format(case.name))
+                    case_doc = case.func_obj.__doc__
                     if case.arg_names:
-                        df.write(case.func_obj.__doc__.format(**dict(zip(case.arg_names, case.arg_values))))
-                    else:
-                        df.write(case.func_obj.__doc__)
-                    df.write('\n\n')
+                        case_doc = case_doc.format(**dict(zip(case.arg_names, case.arg_values)))
+                    df.write('\n'.join([line.strip() for line in case_doc.split('\n') if line]))
+                    df.write('\n')
+
+
+class Context(object):
+    def __init__(self):
+        self._dict = dict()
+
+    def __setattr__(self, key, value):
+        if key[0] == '_':
+            self.__dict__[key] = value
+        else:
+            self._dict[key] = value
+
+    def __getattr__(self, item):
+        if item in self._dict:
+            return self._dict[item]
+        return self.__dict__[item]
 
 
 class Module(object):
@@ -50,8 +66,9 @@ class Module(object):
         self.reporter = reporter
         self._obj = None
         self.items = list()
+        self.context = Context()
 
-        self.name = getattr(self.obj, 'name', self.obj.__name__)
+        self.name = getattr(self.obj, 'name', self.obj.__name__.replace('test_suite_', ''))
         self.description = getattr(self.obj, 'description', '')
 
         self.collect()
@@ -60,6 +77,7 @@ class Module(object):
     def obj(self):
         if not self._obj:
             self._obj = self._getobj()
+            self._obj.__dict__['context'] = dict()
         return self._obj
 
     def _getobj(self):
@@ -76,12 +94,12 @@ class Module(object):
     def setup(self):
         setup_func = getattr(self.obj, 'setup', None)
         if setup_func:
-            setup_func()
+            setup_func(context=self.context)
 
     def teardown(self):
         teardown_func = getattr(self.obj, 'teardown', None)
         if teardown_func:
-            teardown_func()
+            teardown_func(context=self.context)
 
     def collect(self):
         for name, obj in getattr(self.obj, '__dict__', dict()).items():
@@ -95,12 +113,14 @@ class Module(object):
             argnames = argnames.split(',')
 
             for argval in argvalues:
-                items.append(TestCase(func_obj=funcobj,
+                items.append(TestCase(context=self.context,
+                                      func_obj=funcobj,
                                       arg_names=argnames,
-                                      arg_values=[argval] if isinstance(argval, basestring) else argval))
+                                      arg_values=argval if isinstance(argval, dict) or isinstance(argval, tuple) else [argval]))
 
         else:
-            items.append(TestCase(funcobj))
+            items.append(TestCase(context=self.context,
+                                  func_obj=funcobj))
         return items
 
     def run(self):
@@ -109,17 +129,25 @@ class Module(object):
 
 
 class TestCase(object):
-    def __init__(self, func_obj, arg_names=None, arg_values=None):
+    def __init__(self, context, func_obj, arg_names=None, arg_values=None):
+        self.context = context
         self.func_obj = func_obj
         self.arg_names = arg_names or ()
         self.arg_values = arg_values or ()
 
-        self.name = func_obj.__name__
+        self.name = func_obj.__name__.replace('test_case_', '')
         if arg_names:
-            self.name = '{0}[{1}]'.format(self.name, ','.join(['{0}={1}'.format(name, value) for name, value in zip(arg_names, arg_values)]))
+            self.name = '{0}[{1}]'.format(self.name,
+                                          ','.join(['{0}={1}'.format(name, '`{0}`*{1}'
+                                                                     .format(value[0], len(value)) if value and
+                                                                                                      isinstance(value, str) and len(value) > 50 and
+                                                                                                      value == value[0] * len(value) else value)
+                                                    for name, value in zip(arg_names, arg_values)]))
 
     def run(self):
-        self.func_obj(**dict(zip(self.arg_names, self.arg_values)))
+        args_dict = dict(context=self.context)
+        args_dict.update(dict(zip(self.arg_names, self.arg_values)))
+        self.func_obj(**args_dict)
 
 
 class Parametrize(object):

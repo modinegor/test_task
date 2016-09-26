@@ -1,6 +1,8 @@
 import time
 
-from config import LOG_FILE
+import shutil
+
+from config import LOG_FILE, LAST_LOG
 from lib.runner import Module, TestCase
 
 
@@ -22,9 +24,9 @@ class Reporter(object):
             return 2
         except Exception as e:
             if isinstance(item, Module):
-                self.modules[self.cur_module].append(('error', when, e.message))
+                self.modules[self.cur_module].append(('error', when, e.message or e))
             else:
-                self.modules[self.cur_module].append((item.name, 'Error', e.message))
+                self.modules[self.cur_module].append((item.name, 'Error', e.message or e))
             return 1
         else:
             if isinstance(item, TestCase):
@@ -32,7 +34,8 @@ class Reporter(object):
             return 0
 
     def publish(self):
-        with open(time.strftime(LOG_FILE, self.start_time), 'w') as f:
+        log_file_name = time.strftime(LOG_FILE, self.start_time)
+        with open(log_file_name, 'w') as f:
             for module, result in self.modules.items():
                 for item, status, error in result:
                     if item == 'error':
@@ -41,3 +44,5 @@ class Reporter(object):
                         f.write('{0}::{1}: {2} : {3}\n'.format(module, item, status, error))
                     else:
                         f.write('{0}::{1}: {2}\n'.format(module, item, status))
+
+        shutil.copy(log_file_name, LAST_LOG)

@@ -1,0 +1,134 @@
+Test Suite : ACL
+Description: Check ACL
+
+Test Case: check_read
+Check read operation on allowed file by ACL
+
+Test Case: check_write
+Check write operation on not allowed file by ACL
+
+----------------------------------------
+Test Suite : Content
+Description: Check operations on content
+
+Test Case: create_file_root_dir[file_name=simple]
+Create and delete file with name simple
+Steps:
+1. Create file 'simple'
+2. Delete it file
+Expected results:
+1. File created
+2. File deleted
+
+Test Case: create_file_root_dir[file_name=`a`*255]
+Create and delete file with name aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+Steps:
+1. Create file 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+2. Delete it file
+Expected results:
+1. File created
+2. File deleted
+
+Test Case: create_file_root_dir[file_name=a]
+Create and delete file with name a
+Steps:
+1. Create file 'a'
+2. Delete it file
+Expected results:
+1. File created
+2. File deleted
+
+Test Case: create_file_root_dir[file_name=!@#$%^&*()_+]
+Create and delete file with name !@#$%^&*()_+
+Steps:
+1. Create file '!@#$%^&*()_+'
+2. Delete it file
+Expected results:
+1. File created
+2. File deleted
+
+Test Case: create_dir_root_dir[dir_name=simple]
+Create and delete directory with name simple
+Steps:
+1. Create directory 'simple'
+2. Delete it directory
+Expected results:
+1. Directory is created
+2. Directory is deleted
+
+Test Case: create_dir_root_dir[dir_name=`a`*255]
+Create and delete directory with name aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+Steps:
+1. Create directory 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+2. Delete it directory
+Expected results:
+1. Directory is created
+2. Directory is deleted
+
+Test Case: create_dir_root_dir[dir_name=a]
+Create and delete directory with name a
+Steps:
+1. Create directory 'a'
+2. Delete it directory
+Expected results:
+1. Directory is created
+2. Directory is deleted
+
+Test Case: create_dir_root_dir[dir_name=!@#$%^&*()_+]
+Create and delete directory with name !@#$%^&*()_+
+Steps:
+1. Create directory '!@#$%^&*()_+'
+2. Delete it directory
+Expected results:
+1. Directory is created
+2. Directory is deleted
+
+----------------------------------------
+Test Suite : owner
+
+----------------------------------------
+Test Suite : Permissions
+Description: Verify operations on permissions
+
+Test Case: change_file_permissions[mask=777]
+Change permissions for a file to "777"
+Steps:
+1. Change file mask to value 777
+Expected results:
+1. Mask of file has been successfully changed
+
+Test Case: change_file_permissions[mask=666]
+Change permissions for a file to "666"
+Steps:
+1. Change file mask to value 666
+Expected results:
+1. Mask of file has been successfully changed
+
+Test Case: change_file_permissions[mask=444]
+Change permissions for a file to "444"
+Steps:
+1. Change file mask to value 444
+Expected results:
+1. Mask of file has been successfully changed
+
+Test Case: change_dir_permissions[mask=777]
+Change permissions for a directory to "777"
+Steps:
+1. Change directory mask to value 777
+Expected results:
+1. Mask of directory has been successfully changed
+
+Test Case: change_dir_permissions[mask=666]
+Change permissions for a directory to "666"
+Steps:
+1. Change directory mask to value 666
+Expected results:
+1. Mask of directory has been successfully changed
+
+Test Case: change_dir_permissions[mask=444]
+Change permissions for a directory to "444"
+Steps:
+1. Change directory mask to value 444
+Expected results:
+1. Mask of directory has been successfully changed
+
